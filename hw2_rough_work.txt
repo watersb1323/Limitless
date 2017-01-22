@@ -1,0 +1,13 @@
+2. Palindrome
+	racecar = 7/2 = 3.5 -- want 4
+	anna = 4/2 = 2 -- want 2
+verdict: use ceil()
+	Better way to do it:
+	split each string in to 2 substrings:
+	racecar
+		- race -- 	
+			- Obtained by 7/2 = 3.5 ~= 4-1= 3
+			- Extract sub-string [0:3]
+		- ecar
+			- Same as above and extract substring [3:end]
+	Reverse the order of the letters in the second substring and compares

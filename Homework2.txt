@@ -1,0 +1,5 @@
+1. Flatten [1,2,3,4, [1212, 232]] // Remove nulls, ensure result is single array
+2. Create a function that checks if the string you have passed is a palindrome.
+3. 'foo bar hello'  // Add another string to the current string?
+4. remove a string from string, ie. 'foo bar foo' -> 'foo foo'
+5. Get 10 dom elements with class "ll-homework-2" and sort based on their content 

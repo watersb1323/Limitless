@@ -1,0 +1,41 @@
+.DP.main_table {
+    width: 300px;
+    table-layout: fixed;
+    box-shadow: 1px 1px 1px #999;
+    border-collapse: collapse;
+}
+
+.DP.table_header {
+	font-size: 22;
+    background-color: #4CAF50;
+    color: white;
+    height: 60px;
+}
+
+.DP.normal_cell {
+    text-align: center;
+    padding: 8px;
+    width: 50px;
+}
+
+.DP.faded_cell {
+	text-align: center;
+    padding: 8px;
+    width: 50px;
+	color: darkgray;
+}
+
+.DP.row_border_bottom {
+  	border-bottom: 1pt solid grey;
+}
+
+.strElemClass{
+	width: 800px;
+	height: 25px;
+	border: 1px solid #ccc;
+	padding: 5px;
+	text-align: left;
+	display: inline-block;
+	margin: 20px;
+	border-radius: 10px;
+}

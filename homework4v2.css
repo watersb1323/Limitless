@@ -1,0 +1,28 @@
+.dp__table {
+    width: 300px;
+    table-layout: fixed;
+    box-shadow: 1px 1px 1px #999;
+    border-collapse: collapse;
+}
+
+.dp__header {
+	text-align: center;
+	font-size: 22;
+    background-color: #4CAF50;
+    color: white;
+    height: 60px;
+}
+
+.dp__cell {
+    text-align: center;
+    padding: 8px;
+    width: 50px;
+}
+
+.dp__cell--faded {
+	color: darkgray;
+}
+
+.dp__row--border-bottom {
+  	border-bottom: 1pt solid grey;
+}

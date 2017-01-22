@@ -1,0 +1,56 @@
+/////////////////////////////////////////////////////////////
+// Title: 	Session 6 - Notes
+// Date:	05/01/2017
+// Author: 	Brian Waters
+/////////////////////////////////////////////////////////////
+
+Very useful library/language to use for Javascript: SVG
+
+Useful shortcut is to use:
+tag.class <tab>
+
+E.g. li.item gives <li class="item"></li
+>
+Things learned about:
+1. Table - Used for formatting 		<table></table>
+2. ul - Unordered list  			<ul></ul>
+3. ol - ordered list 				<ol></ol>
+4. a - hyperlink  					<a href=""></a>
+5. img - Puts image on screen  		<img src="">
+
+BEM - Useful for class names
+'__' = Element separator, separates Block from elements and then subsequent elements 'has'
+'--' = Modifier 'which is'
+Example: .date-picker__month__week__date--today
+
+Used to maintain single source of truth (SST)
+
+setTimeout() function can be used to execute a function after a certain number of seconds.
+
+Mentioned that recursion could be used to do the tree assignment.
+
+Console.log takes any number of arguments, similar to print() in Python.
+
+--------------------------------------------------------------
+
+Two separate memory systems exist:
+	Document
+	Main memory
+
+When you store a div in a variable by selecting it from the document, we are moving it to main memory.
+Thus, when you removeChild that element from the document, via the variable used, the element still exists in memory within the original variable and it can be re-added to the document by appendChild via the variable.
+
+--------------------------------------------------------------
+
+OBJECTS
+
+var obj = {
+	name: 'yinghan',
+	id: 1,
+	fooBar: function () {},
+	arr: [],
+	o: {
+		arr: []
+	},
+	ele: null
+}
