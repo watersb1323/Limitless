@@ -91,7 +91,7 @@ function fillDates(table, month, year) {
 			currMonth = day.getMonth();
 			currDay = day.getDate();
 			cell.innerHTML = currDay;
-			cell = addDOMClassName(cell,'dp__cel'l);
+			cell = addDOMClassName(cell,'dp__cell');
 			if (currMonth !== month) {
 				cell = addDOMClassName(cell,'dp__cell--faded');
 			}

@@ -1,19 +1,102 @@
-var datepicker = {
-	ele: null,
-	wrap: null,
-	nav: null,
-	month: null,
-	dates: [],
+(function() {
+	'use strict';
 
-	refreshDates: function(dataDates) {
-		for(var i = 0; i < 42; i++) {
-			this.dates[i].innerText = dataDates[i];
-		}
+	var view, model, controller;
+
+	view = {
+		ele: null,
+		wrap: null,
+		nav: null,
+		month: null,
+		dates: [],
+
+		init: function() {
+			this.initEle();
+			this.initNav();
+			this.initTitleRow();
+			this.initDates();
+			return this;
+		},
+
+		initEle: function() {
+			this.ele = document.querySelector('[datepicker]');
+			this.wrap = document.createElement('table');
+			this.ele.appendChild(this.wrap);
+		},
+
+		initNav: function() {
+			var frag = document.createDocumentFragment();
+
+			var header = this.wrap.createTHead();
+			var row = header.insertRow();
+			this.nav = document.createElement('th');
+			var monthNames = [	'January',
+								'February',
+								'March',
+								'April',
+								'May',
+								'June',
+								'July',
+								'August',
+								'September',
+								'October',
+								'November',
+								'December'];
+
+			this.nav.colSpan = 7;
+			this.nav.innerHTML = '< ' + monthNames[1] + ' ' + '2017' + ' >';
+			this.nav = addDOMClassName(this.nav, 'dp__nav');
+
+			row.appendChild(this.nav);
+			frag.appendChild(row);
+
+			this.wrap.appendChild(frag);
+		},
+
+		initTitleRow: function() {
+			var row = this.wrap.insertRow();
+			var days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+			var daysLen = days.length;
+			var tmp;
+
+			for (var i=0; i<daysLen; i++) {
+				tmp = row.insertCell(i);
+				tmp.innerHTML = days[i];
+			}
+
+			row = addDOMClassName(row, 'dp__row--border-bottom');
+		},
+
+		initDates: function() {
+			var date, row;
+			for (var i = 0; i < 6; i ++) {
+				row = this.wrap.insertRow();
+				for (var j = 0; j < 7; j ++) {
+					date = row.insertCell();
+					date = addDOMClassName(date,'dp__cell');
+					this.dates.push(date);
+					this.wrap.appendChild(date);
+				}
+			}
+			this.refreshDates(model.refreshData());
+		},
+
+		refreshDates: function(modelDates) {
+			for(var i = 0; i < 42; i++) {
+				this.dates[i].innerText = modelDates[i];
+			}
+		},
 	},
 
-	dataModel: {
-		yearMonth: {year: null, month: null},
-		data: Array(42),
+	model = {
+		data: {
+			yearMonth: {
+				year: null,
+				month: null
+			},
+			dates: Array(42)
+		},
+
 		init: function() {
 			this.setYearMonth({
 				year: 2017,
@@ -29,19 +112,19 @@ var datepicker = {
 				numOfDays = this.getNumOfDaysInAMonth(y, m),
 				c = 1;
 
-			for(var i = 0, ln = this.data.length; i < ln; i++) {
-					this.data[i] = (i >= offset && i < numOfDays + offset) ? c++ : null; 
+			for(var i = 0, ln = this.data.dates.length; i < ln; i++) {
+					this.data.dates[i] = (i >= offset && i < numOfDays + offset) ? c++ : null; 
 			}
 
-			return this.data;
+			return this.data.dates;
 		},
 
 		getYearMonth: function() {
-			return this.yearMonth;
+			return this.data.yearMonth;
 		},
 
 		setYearMonth: function(yearMonth) {
-			this.yearMonth = yearMonth;
+			this.data.yearMonth = yearMonth;
 			this.updateYearMonth();
 		},
 
@@ -73,31 +156,88 @@ var datepicker = {
 		}
 	},
 
-	init: function() {
-		this.initEle();
-		this.initMonth();
-		return this;
-	},
+	controller = (function(v, m) {
+		m.init();
+		v.init();
 
-	initEle: function() {
-		this.ele = document.querySelector('[datepicker]');
-		this.wrap = document.createElement('ul');
-		this.ele.appendChild(this.wrap);
-	},
+		/*var onClickNext = function() {
+			m.setYearMonth();
+			v.setData(m.getData());
+		};
+		var onClickPre = function() {
+			m.setYearMonth();
+			v.setData(m.getData());
+		};
+		var onClickDate = function() {
+			// maybe show events calendar for this date :)
+		};
 
-	initMonth: function() {
-		var date;
-		var frag = document.createDocumentFragment();
-		for(var i = 0; i < 42; i ++) {
-			date = document.createElement('li');
-			this.dates.push(date);
-			frag.appendChild(date);
-		}
+		v.onClickLeft = onClickNext;
+		v.onClickRight = onClickPre;*/
 
-		this.wrap.appendChild(frag);
-	},
-};
+	})(view, model)
+})();
 
-var myDP = datepicker.init();
-console.log(myDP.dataModel.init())
-datepicker.refreshDates(datepicker.dataModel.data)
+// Add a class name to DOM object provided it doesn't already exist
+function addDOMClassName(domObj, newClassName) {
+	var origClassName = domObj.className;
+
+	domObj.className = appendWordToString(origClassName, newClassName);
+	return domObj;
+}
+
+// Append word to string if that string doesn't
+// already appear in the string
+function appendWordToString(str, word) {
+	var arr,
+		cleanStr,
+		cleanWord,
+		hasWord;
+
+	// Clean the string
+	cleanStr = cleanWhitespace(str);
+	cleanWord = word.trim();
+	arr = cleanStr.split(' ');
+
+	// Check if arr has word already
+	hasWord = checkElementInArray(arr, cleanWord);
+
+	if (!hasWord) {
+		arr.push(cleanWord);
+		cleanStr = arr.join(' ');
+	}
+	return cleanStr;
+}
+
+// Trim beginning and end whitespace and remove multiple 
+// internal whitespaces
+function cleanWhitespace(str) {
+	str = str.replace(/\s+/g,' ').trim();
+	return str;
+}
+
+// Check if element exists in array
+function checkElementInArray(arr, elem) {
+	var index = arr.indexOf(elem);
+	if (index > -1) return true;
+	return false;
+}
+
+// datepicker.refreshDates(datepicker.model.data)
+
+
+
+
+
+/*table
+	header
+		nav
+		month
+	body
+		daysrow
+		daterow1
+		daterow2
+		daterow3
+		daterow4
+		daterow5
+		daterow6*/
