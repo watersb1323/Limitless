@@ -6,16 +6,21 @@
 	view = {
 		ele: null,
 		wrap: null,
-		nav: null,
-		month: null,
+		nav: {
+			left: null,
+			monthYearText: null,
+			right: null
+		},
 		dates: [],
+		onClickLeft: null,
+		onClickRight: null,
 
 		init: function() {
 			this.initEle();
 			this.initNav();
 			this.initTitleRow();
 			this.initDates();
-			return this;
+			//this.initEvent();
 		},
 
 		initEle: function() {
@@ -29,25 +34,20 @@
 
 			var header = this.wrap.createTHead();
 			var row = header.insertRow();
-			this.nav = document.createElement('th');
-			var monthNames = [	'January',
-								'February',
-								'March',
-								'April',
-								'May',
-								'June',
-								'July',
-								'August',
-								'September',
-								'October',
-								'November',
-								'December'];
+			this.nav.left = row.insertCell();
+			this.nav.left.innerHTML = '<';
+			this.nav.left = addDOMClassName(this.nav.left, 'dp__nav');
+			// this.nav.colSpan = 5;
 
-			this.nav.colSpan = 7;
-			this.nav.innerHTML = '< ' + monthNames[1] + ' ' + '2017' + ' >';
-			this.nav = addDOMClassName(this.nav, 'dp__nav');
+			this.nav.monthYearText = row.insertCell();
+			this.nav.monthYearText.colSpan = 5;
+			this.nav.monthYearText.innerHTML = '';
+			this.nav.monthYearText = addDOMClassName(this.nav.monthYearText, 'dp__nav');
 
-			row.appendChild(this.nav);
+			this.nav.right = row.insertCell();
+			this.nav.right.innerHTML = '>';
+			this.nav.right = addDOMClassName(this.nav.right, 'dp__nav');
+
 			frag.appendChild(row);
 
 			this.wrap.appendChild(frag);
@@ -81,7 +81,32 @@
 			this.refreshDates(model.refreshData());
 		},
 
-		refreshDates: function(modelDates) {
+		initEvent: function() {
+			var me = this;
+			this.nav.left.addEventListener('click', me.onClickLeft.bind(me));
+			this.nav.right.addEventListener('click', me.onClickRight.bind(me));
+		},
+
+		refreshDates: function(modelData) {
+			var ym = modelData.yearMonth;
+			var y = ym.year;
+			var m = ym.month;
+			var modelDates = modelData.dates;
+			var monthNames = [	'January',
+								'February',
+								'March',
+								'April',
+								'May',
+								'June',
+								'July',
+								'August',
+								'September',
+								'October',
+								'November',
+								'December'];
+
+			this.nav.monthYearText.innerHTML = monthNames[m] + ' ' + y.toString();
+
 			for(var i = 0; i < 42; i++) {
 				this.dates[i].innerText = modelDates[i];
 			}
@@ -116,7 +141,7 @@
 					this.data.dates[i] = (i >= offset && i < numOfDays + offset) ? c++ : null; 
 			}
 
-			return this.data.dates;
+			return this.data;
 		},
 
 		getYearMonth: function() {
@@ -132,11 +157,23 @@
 			this.refreshData();
 		},
 
+		setNextMonth: function() {
+			var m = this.data.yearMonth.month;
+			var y = this.data.yearMonth.year;
+			this.setYearMonth(this.getNextMonth(y,m));
+		},
+
 		getNextMonth: function(year, month) {
 			return {
 				month : month === 11 ? 0 : month + 1,
 				year : month === 11 ? year + 1 : year
 			};
+		},
+
+		setPreMonth: function() {
+			var m = this.data.yearMonth.month;
+			var y = this.data.yearMonth.year;
+			this.setYearMonth(this.getPreMonth(y,m));
 		},
 
 		getPreMonth: function(year, month) {
@@ -147,7 +184,6 @@
 		},
 
 		getOffset: function(year, month) {
-			console.log(year, month);
 			return ((new Date(year, month, 1)).getDay() + 6) % 7;
 		},
 
@@ -160,20 +196,18 @@
 		m.init();
 		v.init();
 
-		/*var onClickNext = function() {
-			m.setYearMonth();
-			v.setData(m.getData());
+		var onClickNext = function() {
+			m.setNextMonth();
+			v.refreshDates(m.refreshData());
 		};
 		var onClickPre = function() {
-			m.setYearMonth();
-			v.setData(m.getData());
-		};
-		var onClickDate = function() {
-			// maybe show events calendar for this date :)
+			m.setPreMonth();
+			v.refreshDates(m.refreshData());
 		};
 
-		v.onClickLeft = onClickNext;
-		v.onClickRight = onClickPre;*/
+		v.onClickLeft = onClickPre;
+		v.onClickRight = onClickNext;
+		v.initEvent();
 
 	})(view, model)
 })();
