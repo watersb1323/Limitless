@@ -1,0 +1,20 @@
+.ac__chat-display__chat-history__chat-message {
+    border-left: 6px solid red;
+    width: 400px;
+    min-height: 20px;
+    overflow: hidden;
+}
+
+.ac__chat-display__chat-history__chat-message--odd {
+    background-color: whitesmoke;
+}
+
+.ac__chat-display__chat-history__chat-message--even {
+    background-color: white;
+}
+
+.ca__input-box {
+    border-radius: 4px;
+    width: 400px;
+}
+
